@@ -15,7 +15,10 @@ register_tortoise(
     add_exception_handlers=True,
 )
 
-@app.get("/users")
-async def get_users():
-    users = await User.all()
-    return users
+@app.get("/page_for/{username}")
+async def web_app_by_username(username: str):
+    return {"message": f"Привет, {username}!"}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

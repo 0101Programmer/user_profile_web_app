@@ -1,11 +1,10 @@
-from aiogram import Bot, Dispatcher, types
-from aiogram.client.default import DefaultBotProperties
-from aiogram.filters import Command
-from aiogram.types import Message
-from aiogram.utils.keyboard import ReplyKeyboardBuilder
-from aiogram.enums import ParseMode
-from aiogram.utils.token import TokenValidationError
 import asyncio
+
+from aiogram import Bot, Dispatcher
+from aiogram.client.default import DefaultBotProperties
+from aiogram.enums import ParseMode
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import Message
 
 from config import TELEGRAM_BOT_TOKEN
 
@@ -18,20 +17,29 @@ bot = Bot(
 )
 dp = Dispatcher()
 
-# Обработчик команды /start
-@dp.message(Command("start"))
-async def cmd_start(message: Message):
-    await message.answer("Привет! Используй /help, чтобы узнать больше.")
-
-# Обработчик команды /help
-@dp.message(Command("help"))
-async def cmd_help(message: Message):
-    await message.answer("Доступные команды:\n/start - Начать работу\n/help - Помощь")
-
-# Обработчик всех сообщений
+# Обработчик всех входящих сообщений
 @dp.message()
-async def echo(message: Message):
-    await message.answer(f"Введите /start, чтобы Начать работу")
+async def to_web_app(message: Message):
+    username = message.from_user.username  # Получаем username
+
+    # Проверяем, есть ли username
+    if not username:
+        await message.answer("У вас нет username. Пожалуйста, установите его в настройках Telegram.")
+        return
+
+    # Создаем клавиатуру с динамической ссылкой
+    to_web_app_kb = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="Открыть приложение",
+                    url=f"http://127.0.0.1:8000/page_for/{username}"  # Подставляем username в ссылку
+                )
+            ]
+        ]
+    )
+    await message.answer(f"Добро пожаловать! Чтобы перейти в приложение нажми на кнопку",
+                         reply_markup=to_web_app_kb)
 
 # Запуск бота
 async def main():
