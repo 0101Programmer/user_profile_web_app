@@ -1,6 +1,5 @@
 <template>
   <div class="p-4 gradient-bg flex flex-col items-center justify-center min-h-screen">
-    <h1 class="text-2xl mb-4">Добро пожаловать, {{ telegram_username }}!</h1>
     <h1 class="text-2xl mb-4">Введи свою дату рождения</h1>
     <input
       type="date"
@@ -21,9 +20,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { defineProps } from 'vue';
 
 const router = useRouter();
+
 // Получаем username как props
 const props = defineProps({
   telegram_username: {
@@ -31,6 +30,7 @@ const props = defineProps({
     required: true,
   },
 });
+
 const birthDate = ref('');
 
 const isDateSelected = computed(() => birthDate.value !== '');
@@ -38,7 +38,8 @@ const isDateSelected = computed(() => birthDate.value !== '');
 const secondPage = () => {
   router.push({
     path: '/second',
-    query: { date: birthDate.value },
+    query: { birth_date: birthDate.value,
+    telegram_username: props.telegram_username,},
   });
 };
 </script>

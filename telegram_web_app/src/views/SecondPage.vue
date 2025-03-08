@@ -27,18 +27,15 @@
       <!-- Юзернейм -->
       <div class="mb-4">
         <label class="block text-lg mb-2">Юзернейм:</label>
-        <input
-          type="text"
-          v-model="username"
-          class="w-full p-2 border rounded"
-        />
+        <p class="font-bold">{{ telegram_username }}</p>
       </div>
 
       <!-- Дата рождения -->
       <div class="mb-4">
         <label class="block text-lg mb-2">Дата рождения:</label>
-        <p class="font-bold">{{ date }}</p>
+        <p class="font-bold">{{ birth_date }}</p>
       </div>
+
     </div>
   </div>
 </template>
@@ -48,11 +45,11 @@ import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute(); // Получаем доступ к текущему маршруту
-const date = route.query.date; // Получаем дату из query-параметров
+const birth_date = route.query.birth_date; // Получаем дату из query-параметров
+const telegram_username = route.query.telegram_username;
 
 const userFirstName = ref(''); // Имя
 const userLastName = ref(''); // Фамилия
-const username = ref(''); // Юзернейм
 </script>
 
 <style scoped>
