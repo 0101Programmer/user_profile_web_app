@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import App from '../App.vue'; // Корневой компонент
+import StartPage from '../views/StartPage.vue'; // Стартовая страница
 import SecondPage from '../views/SecondPage.vue'; // Вторая страница
 
 const routes = [
   {
-    path: '/',
-    component: App,
+    path: '/web_page_for/:telegram_username',
+    component: StartPage,
+    props: true,
   },
   {
     path: '/second',
