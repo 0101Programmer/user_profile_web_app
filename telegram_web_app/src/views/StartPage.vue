@@ -20,9 +20,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
+import { useUserStore } from '../stores/user';
 
 const router = useRouter();
+const userStore = useUserStore();
 
 // Получаем username как props
 const props = defineProps({
@@ -32,24 +33,23 @@ const props = defineProps({
   },
 });
 
+// Устанавливаем username в хранилище
+userStore.setTelegramUsername(props.telegram_username);
+
 const birthDate = ref('');
 
 const isDateSelected = computed(() => birthDate.value !== '');
 
 const sendBirthDate = async () => {
   try {
-    // Отправляем данные на сервер
-    const response = await axios.get(`http://127.0.0.1:8000/birthday_counter/${birthDate.value}`);
-    // Переходим на следующую страницу с результатом
-    console.log('Данные с сервера:', response.data);
-    console.log('Переход на страницу /second');
-    await router.push({
-      path: '/second',
-      query: {
-        telegram_username: props.telegram_username,
-        time_left: response.data.until_birthday, // Результат с сервера
-      },
-    });
+    // Устанавливаем дату рождения в хранилище
+    userStore.setBirthDate(birthDate.value);
+
+    // Запрашиваем время до дня рождения
+    await userStore.fetchTimeLeft();
+
+    // Переходим на следующую страницу
+    await router.push({ path: '/second' });
   } catch (error) {
     console.error('Ошибка при отправке данных:', error);
   }

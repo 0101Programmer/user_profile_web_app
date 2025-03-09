@@ -10,7 +10,7 @@
         <label class="block text-lg mb-2">Имя:</label>
         <input
           type="text"
-          v-model="userFirstName"
+          v-model="userStore.userFirstName"
           class="w-full p-2 border rounded"
         />
       </div>
@@ -20,7 +20,7 @@
         <label class="block text-lg mb-2">Фамилия:</label>
         <input
           type="text"
-          v-model="userLastName"
+          v-model="userStore.userLastName"
           class="w-full p-2 border rounded"
         />
       </div>
@@ -28,41 +28,39 @@
       <!-- Юзернейм -->
       <div class="mb-4">
         <label class="block text-lg mb-2">Юзернейм:</label>
-        <p class="font-bold">{{ telegram_username }}</p>
+        <p class="font-bold">{{ userStore.telegramUsername }}</p>
       </div>
 
       <!-- Дата рождения -->
       <div class="mb-4">
         <label class="block text-lg mb-2">До дня рождения осталось:</label>
-        <p class="font-bold">{{ time_left }}</p>
+        <p class="font-bold">{{ userStore.timeLeft }}</p>
       </div>
 
       <button
-      @click="copyLink"
-      class="mt-4 px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
+        @click="copyLink"
+        class="mt-4 px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
       >
         Поделиться
       </button>
-
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useUserStore } from '../stores/user';
 
-const route = useRoute(); // Получаем доступ к текущему маршруту
-const time_left = route.query.time_left; // Получаем данные из query-параметров
-const telegram_username = route.query.telegram_username;
+const userStore = useUserStore();
 
-const userFirstName = ref(''); // Имя
-const userLastName = ref(''); // Фамилия
+const copyLink = () => {
+  // Логика для копирования ссылки будет написано чуть позже
+  console.log('Ссылка скопирована');
+};
 </script>
 
 <style scoped>
 .gradient-bg {
-  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Градиент */
-  color: white; /* Цвет текста для контраста */
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
 }
 </style>
