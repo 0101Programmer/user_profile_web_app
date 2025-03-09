@@ -1,42 +1,42 @@
 <template>
-  <div class="p-4 gradient-bg flex flex-col items-center justify-center min-h-screen">
-    <h1 class="text-2xl mb-4">Данные пользователя:</h1>
+  <div class="p-4 bg-gradient-to-br from-[#6a11cb] to-[#2575fc] text-white flex flex-col items-center justify-center min-h-screen">
+    <h1 class="text-3xl font-bold mb-6">Данные пользователя</h1>
 
-    <div class="w-full max-w-md">
+    <!-- Контейнер для данных -->
+    <div class="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-lg">
       <!-- Имя -->
       <div class="mb-4">
-        <label class="block text-lg mb-2">Имя:</label>
-        <p class="font-bold">{{ userData.first_name }}</p>
+        <label class="block text-lg mb-2 text-gray-300">Имя:</label>
+        <p class="font-bold text-xl">{{ userData.first_name }}</p>
       </div>
 
       <!-- Фамилия -->
       <div class="mb-4">
-        <label class="block text-lg mb-2">Фамилия:</label>
-        <p class="font-bold">{{ userData.last_name }}</p>
+        <label class="block text-lg mb-2 text-gray-300">Фамилия:</label>
+        <p class="font-bold text-xl">{{ userData.last_name }}</p>
       </div>
 
       <!-- Юзернейм -->
       <div class="mb-4">
-        <label class="block text-lg mb-2">Юзернейм:</label>
-        <p class="font-bold">{{ userData.telegram_username }}</p>
+        <label class="block text-lg mb-2 text-gray-300">Юзернейм:</label>
+        <p class="font-bold text-xl">{{ userData.telegram_username }}</p>
       </div>
 
       <!-- Дней до дня рождения -->
       <div class="mb-4">
-        <label class="block text-lg mb-2">До дня рождения осталось:</label>
-        <p class="font-bold">{{ userData.time_left }}</p>
+        <label class="block text-lg mb-2 text-gray-300">До дня рождения осталось:</label>
+        <p class="font-bold text-xl">{{ userData.time_left }}</p>
       </div>
 
       <!-- Кнопка для копирования ссылки -->
       <div class="mb-4">
         <button
           @click="copyToClipboard(`http://localhost:5175/share_page/${shareLink}`)"
-          class="w-full px-6 py-3 font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors duration-200"
+          class="w-full px-6 py-3 font-bold text-white bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full shadow-lg hover:scale-105 transition-transform duration-200"
         >
           Поделиться
         </button>
       </div>
-
     </div>
   </div>
 </template>
@@ -75,6 +75,7 @@ const fetchUserData = async () => {
   }
 };
 
+// Метод для копирования ссылки
 const copyToClipboard = async (link: string) => {
   try {
     await navigator.clipboard.writeText(link);
@@ -90,10 +91,3 @@ onMounted(() => {
   fetchUserData();
 });
 </script>
-
-<style scoped>
-.gradient-bg {
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
-  color: white;
-}
-</style>
