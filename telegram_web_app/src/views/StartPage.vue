@@ -1,18 +1,20 @@
 <template>
   <div class="p-4 gradient-bg flex flex-col items-center justify-center min-h-screen">
-    <h1 class="text-3xl mb-6">Введи свою дату рождения</h1>
-    <div class="date-input-container">
-      <input
-        type="date"
-        v-model="birthDate"
-        class="custom-date-input mt-4 p-4 text-xl border-2 border-gray-800 rounded-lg"
-      />
-    </div>
+    <h1 class="text-3xl mb-6 text-white">Выбери свою дату рождения</h1>
 
+    <!-- Календарь -->
+    <VCalendar
+      v-model="birthDate"
+      :attributes="attrs"
+      @dayclick="onDayClick"
+      class="custom-calendar mt-4 p-4 rounded-lg w-full max-w-[350px] shadow-lg transition-transform hover:scale-105"
+    />
+
+    <!-- Кнопка -->
     <button
       @click="sendBirthDate"
       v-if="isDateSelected"
-      class="mt-6 px-6 py-3 bg-blue-600 text-white text-xl rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed shadow-lg"
+      class="mt-6 px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-xl font-bold rounded-full shadow-lg hover:scale-105 transition-transform"
     >
       Продолжить
     </button>
@@ -38,19 +40,36 @@ const props = defineProps({
 // Устанавливаем username в хранилище
 userStore.setTelegramUsername(props.telegram_username);
 
-const birthDate = ref('');
+// Дата рождения
+const birthDate = ref<Date | null>(null);
 
-const isDateSelected = computed(() => birthDate.value !== '');
+// Проверка, выбрана ли дата
+const isDateSelected = computed(() => !!birthDate.value);
 
+const onDayClick = (day: any) => {
+  birthDate.value = day.date; // Явно обновляем значение birthDate
+};
+
+// Настройки для выделения текущей даты
+const attrs = ref([
+  {
+    key: 'today',
+    highlight: {
+      color: 'purple', // Цвет выделения
+      fillMode: 'solid', // Заливка
+    },
+    dates: new Date(),
+  },
+]);
+
+// Отправка даты рождения
 const sendBirthDate = async () => {
   try {
-    // Устанавливаем дату рождения в хранилище
-    userStore.setBirthDate(birthDate.value);
+    if (!birthDate.value) return;
 
-    // Запрашиваем время до дня рождения
+    const formattedDate = birthDate.value.toISOString().split('T')[0];
+    userStore.setBirthDate(formattedDate);
     await userStore.fetchTimeLeft();
-
-    // Переходим на следующую страницу
     await router.push({ path: '/second' });
   } catch (error) {
     console.error('Ошибка при отправке данных:', error);
@@ -64,28 +83,16 @@ const sendBirthDate = async () => {
   color: white;
 }
 
-.custom-date-input {
-  font-size: 1.5rem;
-  padding: 1rem;
-  background-color: #f9f9f9;
-  color: #333;
-  border: 2px solid #555;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 300px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+.custom-calendar {
+  background: rgba(255, 255, 255, 0.1); /* Полупрозрачный фон */
+  backdrop-filter: blur(10px); /* Размытие */
+  border: 2px solid rgba(255, 255, 255, 0.2); /* Светлая граница */
+  border-radius: 16px; /* Скругленные углы */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Тень */
+  transition: transform 0.3s ease; /* Анимация увеличения */
 }
 
-.custom-date-input:focus {
-  outline: none;
-  border-color: #2575fc;
-  box-shadow: 0 0 8px rgba(37, 117, 252, 0.5);
-}
-
-.date-input-container {
-  display: flex;
-  justify-content: center;
-  width: 100%;
+.custom-calendar:hover {
+  transform: scale(1.05); /* Эффект увеличения при наведении */
 }
 </style>
