@@ -44,20 +44,20 @@
         <button
           @click="copyLink"
           v-if="fullName"
-          class="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+          class="w-full px-6 py-3 font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors duration-200"
         >
           Поделиться
         </button>
       </div>
-      <div v-else>
-        <a
-            :href="userStore.shareLink"
-            @click.prevent="copyToClipboard(userStore.shareLink)"
-            class="mt-4 font-bold block text-blue-300 hover:text-blue-100 hover:underline cursor-pointer transition-colors duration-200"
+      <div v-else class="mb-4">
+        <button
+            @click="copyToClipboard(userStore.shareLink)"
+            class="w-full px-6 py-3 font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors duration-200"
         >
-          {{ userStore.shareLink }}
-        </a>
+          Скопировать ссылку
+        </button>
       </div>
+
     </div>
   </div>
 </template>

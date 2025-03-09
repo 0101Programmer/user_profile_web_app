@@ -27,16 +27,14 @@
         <p class="font-bold">{{ userData.time_left }}</p>
       </div>
 
-      <!-- Ссылка, чтобы поделиться с кем-то ещё -->
+      <!-- Кнопка для копирования ссылки -->
       <div class="mb-4">
-        <label class="block text-lg mb-2">Поделиться:</label>
-        <a
-          :href="`http://localhost:5175/share_page/${shareLink}`"
-          @click.prevent="copyToClipboard(`http://localhost:5175/share_page/${shareLink}`)"
-          class="font-bold block text-blue-300 hover:text-blue-100 hover:underline cursor-pointer transition-colors duration-200"
+        <button
+          @click="copyToClipboard(`http://localhost:5175/share_page/${shareLink}`)"
+          class="w-full px-6 py-3 font-bold text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors duration-200"
         >
-          http://localhost:5175/share_page/{{ shareLink }}
-        </a>
+          Поделиться
+        </button>
       </div>
 
     </div>

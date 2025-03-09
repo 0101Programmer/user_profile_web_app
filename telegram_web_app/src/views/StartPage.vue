@@ -1,16 +1,18 @@
 <template>
   <div class="p-4 gradient-bg flex flex-col items-center justify-center min-h-screen">
-    <h1 class="text-2xl mb-4">Введи свою дату рождения</h1>
-    <input
-      type="date"
-      v-model="birthDate"
-      class="mt-2 p-2 border rounded"
-    />
+    <h1 class="text-3xl mb-6">Введи свою дату рождения</h1>
+    <div class="date-input-container">
+      <input
+        type="date"
+        v-model="birthDate"
+        class="custom-date-input mt-4 p-4 text-xl border-2 border-gray-800 rounded-lg"
+      />
+    </div>
 
     <button
       @click="sendBirthDate"
       v-if="isDateSelected"
-      class="mt-4 px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
+      class="mt-6 px-6 py-3 bg-blue-600 text-white text-xl rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed shadow-lg"
     >
       Продолжить
     </button>
@@ -60,5 +62,30 @@ const sendBirthDate = async () => {
 .gradient-bg {
   background: linear-gradient(135deg, #6a11cb, #2575fc);
   color: white;
+}
+
+.custom-date-input {
+  font-size: 1.5rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  color: #333;
+  border: 2px solid #555;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 300px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.custom-date-input:focus {
+  outline: none;
+  border-color: #2575fc;
+  box-shadow: 0 0 8px rgba(37, 117, 252, 0.5);
+}
+
+.date-input-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 </style>
