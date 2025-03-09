@@ -4,6 +4,7 @@
 
     <!-- Контейнер для формы -->
     <div class="w-full max-w-md">
+
       <!-- Поле для имени -->
       <div class="mb-4">
         <label class="block text-lg mb-2">Имя:</label>
@@ -32,9 +33,16 @@
 
       <!-- Дата рождения -->
       <div class="mb-4">
-        <label class="block text-lg mb-2">Дата рождения:</label>
-        <p class="font-bold">{{ birth_date }}</p>
+        <label class="block text-lg mb-2">До дня рождения осталось:</label>
+        <p class="font-bold">{{ time_left }}</p>
       </div>
+
+      <button
+      @click="copyLink"
+      class="mt-4 px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
+      >
+        Поделиться
+      </button>
 
     </div>
   </div>
@@ -45,7 +53,7 @@ import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute(); // Получаем доступ к текущему маршруту
-const birth_date = route.query.birth_date; // Получаем дату из query-параметров
+const time_left = route.query.time_left; // Получаем данные из query-параметров
 const telegram_username = route.query.telegram_username;
 
 const userFirstName = ref(''); // Имя

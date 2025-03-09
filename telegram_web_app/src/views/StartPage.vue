@@ -8,7 +8,7 @@
     />
 
     <button
-      @click="secondPage"
+      @click="sendBirthDate"
       :disabled="!isDateSelected"
       class="mt-4 px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
     >
@@ -20,6 +20,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 const router = useRouter();
 
@@ -35,12 +36,23 @@ const birthDate = ref('');
 
 const isDateSelected = computed(() => birthDate.value !== '');
 
-const secondPage = () => {
-  router.push({
-    path: '/second',
-    query: { birth_date: birthDate.value,
-    telegram_username: props.telegram_username,},
-  });
+const sendBirthDate = async () => {
+  try {
+    // Отправляем данные на сервер
+    const response = await axios.get(`http://127.0.0.1:8000/birthday_counter/${birthDate.value}`);
+    // Переходим на следующую страницу с результатом
+    console.log('Данные с сервера:', response.data);
+    console.log('Переход на страницу /second');
+    await router.push({
+      path: '/second',
+      query: {
+        telegram_username: props.telegram_username,
+        time_left: response.data.until_birthday, // Результат с сервера
+      },
+    });
+  } catch (error) {
+    console.error('Ошибка при отправке данных:', error);
+  }
 };
 </script>
 

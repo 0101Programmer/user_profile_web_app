@@ -6,7 +6,7 @@ from aiogram.enums import ParseMode
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.types import Message
 
-from config import TELEGRAM_BOT_TOKEN
+from config import TELEGRAM_BOT_TOKEN, FASTAPI_BASE_URL
 
 API_TOKEN = TELEGRAM_BOT_TOKEN
 
@@ -33,7 +33,7 @@ async def to_web_app(message: Message):
             [
                 InlineKeyboardButton(
                     text="Открыть приложение",
-                    url=f"http://127.0.0.1:8000/page_for/{username}"  # Подставляем username в ссылку
+                    url=f"{FASTAPI_BASE_URL}/page_for/{username}"  # Подставляем username в ссылку
                 )
             ]
         ]
