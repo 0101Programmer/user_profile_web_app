@@ -9,7 +9,7 @@
 
     <button
       @click="sendBirthDate"
-      :disabled="!isDateSelected"
+      v-if="isDateSelected"
       class="mt-4 px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
     >
       Продолжить

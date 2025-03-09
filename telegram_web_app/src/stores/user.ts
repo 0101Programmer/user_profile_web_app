@@ -9,6 +9,8 @@ export const useUserStore = defineStore('user', () => {
   const userLastName = ref('');
   const birthDate = ref('');
   const timeLeft = ref('');
+  const isShared = ref(false); // Состояние для проверки была ли нажата кнопка поделиться
+  const shareLink = ref('');
 
   // Действия
   const setTelegramUsername = (username: string) => {
@@ -17,6 +19,14 @@ export const useUserStore = defineStore('user', () => {
 
   const setBirthDate = (date: string) => {
     birthDate.value = date;
+  };
+
+  const setShared = (value: boolean) => {
+    isShared.value = value;
+  };
+
+  const setShareLink = (link: string) => {
+    shareLink.value = link; // Установка ссылки
   };
 
   const fetchTimeLeft = async () => {
@@ -35,8 +45,12 @@ export const useUserStore = defineStore('user', () => {
     userLastName,
     birthDate,
     timeLeft,
+    isShared,
+    shareLink,
     setTelegramUsername,
     setBirthDate,
     fetchTimeLeft,
+    setShared,
+    setShareLink,
   };
 });

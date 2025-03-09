@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 
 from fastapi import FastAPI, HTTPException
@@ -6,6 +7,7 @@ from tortoise.contrib.fastapi import register_tortoise
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import DATABASE_URL, VUE_BASE_URL
+from models import UserData, User
 
 app = FastAPI()
 
@@ -72,6 +74,58 @@ async def birthday_counter(birthdate: str):
 
     except ValueError:
         raise HTTPException(status_code=400, detail="Некорректный формат даты. Используйте ГГГГ-ММ-ДД")
+
+
+# Эндпоинт для сохранения данных пользователя
+@app.post("/save_user_data/")
+async def save_user_data(user_data: UserData):
+    try:
+        # Проверяем, существует ли пользователь
+        user = await User.get_or_none(tg_username=user_data.telegram_username)
+        if user:
+            # Если пользователь существует, обновляем его данные
+            user.first_name = user_data.first_name
+            user.last_name = user_data.last_name
+            user.birthdate = user_data.birthdate
+            user.time_left = user_data.time_left
+            await user.save()  # Сохраняем обновлённые данные
+            return {"message": "Данные пользователя обновлены", "share_link": user.share_link}
+        else:
+            # Если пользователь не существует, создаём нового
+            share_link = uuid.uuid4()
+            await User.create(
+                first_name=user_data.first_name,
+                last_name=user_data.last_name,
+                tg_username=user_data.telegram_username,
+                birthdate=user_data.birthdate,
+                time_left=user_data.time_left,
+                share_link=share_link,
+            )
+            return {"message": "Пользователь создан", "share_link": share_link}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Эндпоинт для запроса данных пользователя
+@app.get("/get_user_data/{share_link}")
+async def get_user_data(share_link: str):
+    try:
+        # Ищем пользователя по share_link
+        user = await User.get_or_none(share_link=share_link)
+
+        if user:
+            return {
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "telegram_username": user.tg_username,
+                "time_left": user.time_left,
+            }
+        else:
+            return {
+                "user": False,
+            }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
